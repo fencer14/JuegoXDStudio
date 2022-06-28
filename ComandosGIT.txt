@@ -18,8 +18,10 @@ git init: inicializar repositorio.
 git status: comprobar cambios en el repositorio.
 git add (archivo x): actualiza el archivo para el repositorio.
 git commit -m "(anuncio)": sube una copia del repositorio.
+git push origin main: sube al repositorio los commit
+git pull origin main: carga los cambios a la carpeta local
 
 git log --oneline: mejora la comprensión del código.
 git branch (nombre de la rama): crea una rama (por defecto existe "master").
 git branch -d (nombre de la rama): elimina la rama.
-git checkout (nombre de la rama): para cambiar la rama en la que se trabaja actualmente.
+
