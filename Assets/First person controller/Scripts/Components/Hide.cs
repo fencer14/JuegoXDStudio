@@ -1,71 +1,74 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class Hide : MonoBehaviour
 {
     public Rigidbody rb;
-    public Transform escondite;
+    public List<GameObject> escondites;
+    public Vector3 escondite;
+    public float distance = 1f;
     public CapsuleCollider capsule;
-    public bool hidden = false;
     public GameObject panelF;
-    public bool canHide = true;
-    public string hola;
     public FirstPersonMovement fpm;
-    // Start is called before the first frame update
+    public Vector3 beforePosition;
+    public bool trigger;
+    public bool isHide;
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         capsule = GetComponent<CapsuleCollider>();
         fpm = GetComponent<FirstPersonMovement>();
     }
-
-    // Update is called once per frame
     void Update()
     {
-
-    }
-    void Hiding()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
+        BuscarEscondite();
+        if (Input.GetKeyDown(KeyCode.F) && trigger == true && isHide == false)
         {
-            if(canHide && !hidden)
+            beforePosition = transform.position;
+            capsule.isTrigger = true;
+            rb.isKinematic = true;
+            fpm.enabled = false;
+            transform.position = escondite;
+            isHide = true;
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.F) && trigger == true && isHide == true)
             {
-                hidden = true;
-                capsule.isTrigger = true;
-                rb.isKinematic = true;
-                fpm.enabled = false;
-                transform.position = escondite.position;
-                StartCoroutine(CoolDownHide());
-                
-
-            }
-            if(canHide && hidden)
-            {
-                hidden = false;
                 capsule.isTrigger = false;
                 rb.isKinematic = false;
                 fpm.enabled = true;
-                transform.position += transform.up;
-                StartCoroutine(CoolDownHide());
-                
+                transform.position = beforePosition;
+                isHide = false;
             }
-            
-            
         }
     }
-    IEnumerator CoolDownHide()
+    void BuscarEscondite()
     {
-        canHide = false;
-        yield return new WaitForSeconds(0.2f);
-        canHide = true;
+
+        foreach (GameObject i in escondites)
+        {
+            float distancia = Vector3.Distance(transform.position, i.transform.position);
+            if (distancia < distance)
+            {
+                escondite = i.transform.position;
+            }
+        }
     }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.tag == "escondite")
+    //    {
+    //        escondite.position = other.transform.position;
+    //    }
+    //}
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "escondite")
         {
             panelF.SetActive(true);
-            Hiding();
+            
+            trigger = true;
         }
     }
     private void OnTriggerExit(Collider other)
@@ -73,6 +76,8 @@ public class Hide : MonoBehaviour
         if (other.gameObject.tag == "escondite")
         {
             panelF.SetActive(false);
+            
+            trigger = false;
         }
     }
 }
