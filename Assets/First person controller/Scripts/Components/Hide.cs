@@ -43,6 +43,7 @@ public class Hide : MonoBehaviour
             }
         }
     }
+    //Esto funciona y no sé por qué xD
     void BuscarEscondite()
     {
 
@@ -55,13 +56,6 @@ public class Hide : MonoBehaviour
             }
         }
     }
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.tag == "escondite")
-    //    {
-    //        escondite.position = other.transform.position;
-    //    }
-    //}
     private void OnTriggerStay(Collider other)
     {
         if (other.gameObject.tag == "escondite")
